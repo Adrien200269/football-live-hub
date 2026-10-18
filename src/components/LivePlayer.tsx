@@ -16,9 +16,12 @@ import {
   RefreshCw,
   ExternalLink,
   Layers,
-  Settings
+  Settings,
+  Activity,
+  Tv
 } from 'lucide-react';
 import { Match, StreamSource } from '../types/football';
+import { LivePitchTracker } from './LivePitchTracker';
 
 interface LivePlayerProps {
   currentMatch: Match | null;
@@ -51,6 +54,7 @@ export const LivePlayer: React.FC<LivePlayerProps> = ({
   const [availableLevels, setAvailableLevels] = useState<{ id: number; height: number; bitrate: number }[]>([]);
   const [currentLevel, setCurrentLevel] = useState<number>(-1); // -1 = Auto
   const [showQualityMenu, setShowQualityMenu] = useState<boolean>(false);
+  const [playerMode, setPlayerMode] = useState<'video' | 'pitch'>('video');
 
   const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -272,22 +276,51 @@ export const LivePlayer: React.FC<LivePlayerProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 text-xs">
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center bg-gray-900 p-0.5 rounded-lg border border-gray-800 text-[11px]">
+                <button
+                  onClick={() => setPlayerMode('video')}
+                  className={`px-2.5 py-1 rounded font-semibold flex items-center space-x-1 transition ${
+                    playerMode === 'video'
+                      ? 'bg-emerald-500 text-black shadow'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <Tv className="w-3 h-3" />
+                  <span>Live Stream</span>
+                </button>
+                <button
+                  onClick={() => setPlayerMode('pitch')}
+                  className={`px-2.5 py-1 rounded font-semibold flex items-center space-x-1 transition ${
+                    playerMode === 'pitch'
+                      ? 'bg-emerald-500 text-black shadow'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <Activity className="w-3 h-3" />
+                  <span>2D Live Radar</span>
+                </button>
+              </div>
+
               {currentMatch.status === 'LIVE' ? (
-                <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-red-500/20 border border-red-500/40 text-red-400 font-bold">
+                <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-red-500/20 border border-red-500/40 text-red-400 font-bold text-xs">
                   <span className="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
                   <span>LIVE • {currentMatch.minute}&apos;</span>
                 </div>
               ) : (
-                <span className="text-gray-400">{currentMatch.time}</span>
+                <span className="text-gray-400 text-xs hidden sm:inline">{currentMatch.time}</span>
               )}
-              <span className="text-gray-500 hidden sm:inline">•</span>
-              <span className="text-gray-400 hidden sm:inline">{currentMatch.stadium}</span>
             </div>
           </div>
         )}
 
-        {/* Video Canvas Container */}
+        {/* Conditional View: 2D Radar vs Video Canvas */}
+        {playerMode === 'pitch' && currentMatch ? (
+          <div className="p-4 bg-stadium-950">
+            <LivePitchTracker match={currentMatch} />
+          </div>
+        ) : (
+        /* Video Canvas Container */
         <div
           ref={containerRef}
           onMouseMove={handleMouseMove}
@@ -490,6 +523,7 @@ export const LivePlayer: React.FC<LivePlayerProps> = ({
             </>
           )}
         </div>
+        )}
 
         {/* Stream Source Selector Toolbar */}
         <div className="bg-stadium-850 px-4 sm:px-6 py-3 border-t border-gray-800 flex flex-wrap items-center justify-between gap-3 text-xs">

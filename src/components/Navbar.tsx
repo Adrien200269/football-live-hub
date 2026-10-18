@@ -58,6 +58,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
+              onClick={() => setActiveTab('free_live')}
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1.5 ${
+                activeTab === 'free_live'
+                  ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-sm'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-800/60'
+              }`}
+            >
+              <span>Watch Free TV</span>
+              <span className="px-1.5 py-0.2 rounded text-[10px] font-black bg-emerald-500 text-black">
+                FREE
+              </span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('matches')}
               className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1.5 ${
                 activeTab === 'matches'
@@ -130,7 +144,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => setActiveTab('player')}
             className={`py-1 px-2 rounded ${activeTab === 'player' ? 'text-emerald-400 font-bold' : 'text-gray-400'}`}
           >
-            Live Player
+            Player
+          </button>
+          <button
+            onClick={() => setActiveTab('free_live')}
+            className={`py-1 px-2 rounded ${activeTab === 'free_live' ? 'text-emerald-400 font-bold' : 'text-gray-400'}`}
+          >
+            Free TV
           </button>
           <button
             onClick={() => setActiveTab('matches')}

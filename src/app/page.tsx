@@ -29,6 +29,7 @@ import { HighlightsGrid } from '../components/HighlightsGrid';
 import { StandingsTable } from '../components/StandingsTable';
 import { BroadcasterGuide } from '../components/BroadcasterGuide';
 import { StreamSourceModal } from '../components/StreamSourceModal';
+import { FreeLiveChannels } from '../components/FreeLiveChannels';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<string>('player');
@@ -327,6 +328,13 @@ export default function Home() {
                 <p className="text-gray-400 text-sm">No matches found for the selected filter.</p>
               </div>
             )}
+          </div>
+        )}
+
+        {/* FREE LIVE TV CHANNELS TAB */}
+        {activeTab === 'free_live' && (
+          <div className="animate-in fade-in duration-200">
+            <FreeLiveChannels />
           </div>
         )}
 
