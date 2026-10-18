@@ -103,20 +103,26 @@ export async function GET() {
             streamSources: [
               {
                 id: `feed-1-${ev.id}`,
-                title: 'High-Definition Feed 01 (1080p)',
-                url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-                type: 'hls',
-                quality: '1080p 60fps',
-                serverName: 'Cloud Edge Fast CDN',
+                title: 'Official Match Replay & Extended Highlights',
+                url: config.compId === 'laliga'
+                  ? 'https://www.youtube.com/embed/irzxnoX6xvo?autoplay=1'
+                  : config.compId === 'ucl'
+                  ? 'https://www.youtube.com/embed/vrHkyEwQsbY?autoplay=1'
+                  : 'https://www.youtube.com/embed/VM71aSciS2w?autoplay=1',
+                type: 'youtube',
+                quality: '1080p Official',
+                serverName: 'Official HD Broadcast Replay',
                 isOfficial: true,
               },
               {
                 id: `feed-2-${ev.id}`,
-                title: 'Backup Stream 02 (720p)',
-                url: 'https://playertest.longtailvideo.com/adaptive/oceans_aes/oceans_aes.m3u8',
-                type: 'hls',
+                title: 'Alternative Extended Match Action',
+                url: config.compId === 'laliga'
+                  ? 'https://www.youtube.com/embed/irzxnoX6xvo?autoplay=1'
+                  : 'https://www.youtube.com/embed/fmzgXI3m0Vc?autoplay=1',
+                type: 'youtube',
                 quality: '720p HD',
-                serverName: 'Secondary Edge Node',
+                serverName: 'Secondary Sports Feed',
               },
             ],
           };

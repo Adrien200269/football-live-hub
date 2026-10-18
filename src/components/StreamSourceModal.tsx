@@ -12,25 +12,25 @@ interface StreamSourceModalProps {
 
 const PRESET_TEST_STREAMS = [
   {
-    title: 'Mux Ultra-Low Latency Live Feed (Test)',
-    url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-    type: 'hls' as const,
-    quality: '1080p 60fps',
-    serverName: 'Cloud CDN Test',
+    title: 'Premier League Match Highlights (Arsenal vs Man City)',
+    url: 'https://www.youtube.com/embed/VM71aSciS2w?autoplay=1',
+    type: 'youtube' as const,
+    quality: '1080p Official',
+    serverName: 'Premier League HD',
   },
   {
-    title: 'Akamai Adaptive Sports Stream (Test)',
-    url: 'https://playertest.longtailvideo.com/adaptive/oceans_aes/oceans_aes.m3u8',
-    type: 'hls' as const,
-    quality: '720p Adaptive',
-    serverName: 'Frankfurt Edge',
+    title: 'El Clásico Epic Action (Real Madrid vs Barcelona)',
+    url: 'https://www.youtube.com/embed/irzxnoX6xvo?autoplay=1',
+    type: 'youtube' as const,
+    quality: '4K Official',
+    serverName: 'La Liga EA Sports HD',
   },
   {
-    title: 'Big Buck Bunny Live Loop HLS',
-    url: 'https://test-streams.mux.dev/test_001/stream.m3u8',
-    type: 'hls' as const,
-    quality: '1080p Master',
-    serverName: 'Mux Origin',
+    title: 'UEFA Champions League Action (Bayern vs Real Madrid)',
+    url: 'https://www.youtube.com/embed/vrHkyEwQsbY?autoplay=1',
+    type: 'youtube' as const,
+    quality: '1080p Official',
+    serverName: 'UCL Official Broadcast',
   },
 ];
 
