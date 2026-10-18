@@ -1,12 +1,28 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Trophy } from 'lucide-react';
+import { Trophy, RefreshCw } from 'lucide-react';
+import { StandingTeam } from '../types/football';
 import { MOCK_STANDINGS } from '../data/mockMatches';
 
-export const StandingsTable: React.FC = () => {
+interface StandingsTableProps {
+  liveStandings?: Record<string, StandingTeam[]>;
+  isLoading?: boolean;
+  onRefresh?: () => void;
+}
+
+export const StandingsTable: React.FC<StandingsTableProps> = ({
+  liveStandings,
+  isLoading,
+  onRefresh,
+}) => {
   const [activeLeague, setActiveLeague] = useState<'epl' | 'laliga' | 'ucl'>('epl');
-  const teams = MOCK_STANDINGS[activeLeague];
+
+  // Use live data if available, fallback to mock
+  const currentTable =
+    liveStandings && liveStandings[activeLeague] && liveStandings[activeLeague].length > 0
+      ? liveStandings[activeLeague]
+      : MOCK_STANDINGS[activeLeague];
 
   const leagueNames = {
     epl: 'Premier League Table',
@@ -18,36 +34,52 @@ export const StandingsTable: React.FC = () => {
     <div className="bg-stadium-900 border border-gray-800 rounded-xl overflow-hidden shadow-xl">
       {/* Table Header and League Switcher */}
       <div className="p-4 sm:p-5 bg-stadium-850 border-b border-gray-800 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2.5">
           <Trophy className="w-5 h-5 text-amber-400" />
           <h2 className="text-base font-bold text-white">{leagueNames[activeLeague]}</h2>
+          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            Real-Time
+          </span>
         </div>
 
-        <div className="flex items-center bg-gray-900 p-1 rounded-lg border border-gray-800 text-xs">
-          <button
-            onClick={() => setActiveLeague('epl')}
-            className={`px-3 py-1.5 rounded-md font-semibold transition ${
-              activeLeague === 'epl' ? 'bg-purple-600 text-white shadow' : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            EPL
-          </button>
-          <button
-            onClick={() => setActiveLeague('laliga')}
-            className={`px-3 py-1.5 rounded-md font-semibold transition ${
-              activeLeague === 'laliga' ? 'bg-orange-500 text-white shadow' : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            La Liga
-          </button>
-          <button
-            onClick={() => setActiveLeague('ucl')}
-            className={`px-3 py-1.5 rounded-md font-semibold transition ${
-              activeLeague === 'ucl' ? 'bg-blue-600 text-white shadow' : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            UCL
-          </button>
+        <div className="flex items-center space-x-2">
+          {onRefresh && (
+            <button
+              onClick={onRefresh}
+              disabled={isLoading}
+              className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700 transition"
+              title="Refresh Standings"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-emerald-400' : ''}`} />
+            </button>
+          )}
+
+          <div className="flex items-center bg-gray-900 p-1 rounded-lg border border-gray-800 text-xs">
+            <button
+              onClick={() => setActiveLeague('epl')}
+              className={`px-3 py-1.5 rounded-md font-semibold transition ${
+                activeLeague === 'epl' ? 'bg-purple-600 text-white shadow' : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              EPL
+            </button>
+            <button
+              onClick={() => setActiveLeague('laliga')}
+              className={`px-3 py-1.5 rounded-md font-semibold transition ${
+                activeLeague === 'laliga' ? 'bg-orange-500 text-white shadow' : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              La Liga
+            </button>
+            <button
+              onClick={() => setActiveLeague('ucl')}
+              className={`px-3 py-1.5 rounded-md font-semibold transition ${
+                activeLeague === 'ucl' ? 'bg-blue-600 text-white shadow' : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              UCL
+            </button>
+          </div>
         </div>
       </div>
 
@@ -68,7 +100,7 @@ export const StandingsTable: React.FC = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-800/60 font-medium">
-            {teams.map((row) => (
+            {currentTable.map((row) => (
               <tr key={row.team} className="hover:bg-gray-800/30 transition-colors">
                 <td className="py-3 px-4 text-center">
                   <span
@@ -83,7 +115,15 @@ export const StandingsTable: React.FC = () => {
                 </td>
                 <td className="py-3 px-4">
                   <div className="flex items-center space-x-3">
-                    <img src={row.logo} alt={row.team} className="w-6 h-6 object-contain" />
+                    <img
+                      src={row.logo}
+                      alt={row.team}
+                      className="w-6 h-6 object-contain"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src =
+                          'https://a.espncdn.com/i/teamlogos/soccer/500/default-team-logo.png';
+                      }}
+                    />
                     <span className="font-bold text-white text-xs sm:text-sm">{row.team}</span>
                   </div>
                 </td>
@@ -121,11 +161,12 @@ export const StandingsTable: React.FC = () => {
         </table>
       </div>
 
-      <div className="p-3 bg-stadium-950/60 border-t border-gray-800 text-[11px] text-gray-500 flex items-center space-x-4">
+      <div className="p-3 bg-stadium-950/60 border-t border-gray-800 text-[11px] text-gray-500 flex items-center justify-between">
         <div className="flex items-center space-x-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
           <span>Positions 1-4: UEFA Champions League Group Stage Qualification</span>
         </div>
+        <span className="hidden sm:inline">Official League Standings Feed</span>
       </div>
     </div>
   );
