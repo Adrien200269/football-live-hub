@@ -1,5 +1,10 @@
 # ⚽ KickoffLive — Ad-Free Football Match & Live Stream Hub
 
+[![Production](https://img.shields.io/badge/Vercel-Live%20Site-emerald?logo=vercel)](https://football-live-hub.vercel.app)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/Adrien200269/football-live-hub)
+
+🌐 **Live URL:** [https://football-live-hub.vercel.app](https://football-live-hub.vercel.app)
+
 A full-stack Next.js 16 + React 19 web application built for watching football matches, checking real-time scores, exploring in-depth match lineups & commentary, viewing official highlights, and streaming live feeds with **zero ads, zero tracking, and zero malicious popups**.
 
 ---
